@@ -22,24 +22,39 @@
 - Database performance optimization for slow connections
 - Audit trail functionality for GDPR compliance
 
-### **2. Two-Factor Authentication (2FA)**
-**⏰ Timeline**: 4-5 days | **👥 Priority**: High
+### **2. Password Reset & Account Recovery**
+**⏰ Timeline**: 2-3 days | **👥 Priority**: High
 
 #### **Tasks**:
-- [ ] Implement SMS-based 2FA with secure token generation
-- [ ] Create email-based 2FA as backup option
-- [ ] Build 2FA setup and management interface
-- [ ] Add 2FA recovery options and backup codes
-- [ ] Integrate 2FA with existing login flow
+- [ ] Create secure password reset token system
+- [ ] Build password reset email templates
+- [ ] Implement account recovery flow with email verification
+- [ ] Add password strength validation and feedback
+- [ ] Create account security settings page
 
 #### **Deliverables**:
-- Complete 2FA system with SMS and email options
+- Secure password reset functionality
+- Email templates for account recovery
+- Password strength validation with user feedback
+- Account security management interface
+
+### **3. Two-Factor Authentication (2FA) - SUSPENDED**
+**⏰ Timeline**: Post-Phase 3 | **👥 Priority**: Medium
+
+> **📋 STATUS UPDATE**: 2FA implementation temporarily suspended pending identification of straightforward TOTP solution (Google Authenticator compatible). Will leverage existing Payload CMS framework for integration when ready.
+
+#### **Pending Tasks** (To be implemented post-Phase 3):
+- [ ] Identify and integrate TOTP solution (Google Authenticator compatible)
+- [ ] Implement app-based 2FA with secure token generation
+- [ ] Build 2FA setup and management interface
+- [ ] Add 2FA recovery options and backup codes
+- [ ] Integrate 2FA with existing login flow using Payload CMS
+
+#### **Future Deliverables**:
+- TOTP-based 2FA system (no SMS dependency)
 - User-friendly setup and management interface
 - Backup code system for account recovery
 - Security documentation and user guides
-
-### **3. Password Reset & Account Recovery**
-**⏰ Timeline**: 2-3 days | **👥 Priority**: High
 
 #### **Tasks**:
 - [ ] Create secure password reset token system
