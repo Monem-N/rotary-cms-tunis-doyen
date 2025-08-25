@@ -1,0 +1,48 @@
+/* Tunisia-specific RTL support for Arabic content */
+
+/* RTL support for Arabic locale */
+[data-locale="ar"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL support for rich text editor */
+[data-locale="ar"] .rich-text,
+[data-locale="ar"] .lexical-editor {
+  direction: rtl;
+  text-align: right;
+}
+
+/* RTL support for form fields */
+[data-locale="ar"] input,
+[data-locale="ar"] textarea,
+[data-locale="ar"] .field-type {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Ensure proper Arabic font rendering */
+[data-locale="ar"] {
+  font-family: 'Noto Sans Arabic', 'Arial Unicode MS', sans-serif;
+}
+
+/* Admin panel enhancements for volunteer-friendly interface */
+.volunteer-dashboard {
+  .admin-panel {
+    /* Hide complex technical menus for volunteers */
+    .nav-group[data-group="Admin"] {
+      display: none;
+    }
+  }
+}
+
+/* Mobile-first responsive design for Tunisia */
+@media (max-width: 768px) {
+  .admin-panel {
+    font-size: 16px; /* Prevent zoom on mobile */
+  }
+
+  .field-type {
+    min-height: 44px; /* Touch-friendly targets */
+  }
+}
