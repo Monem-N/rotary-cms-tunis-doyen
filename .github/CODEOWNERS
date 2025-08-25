@@ -1,0 +1,62 @@
+# Rotary CMS Code Owners
+# This file defines who should be automatically requested for review
+# when changes are made to specific parts of the codebase.
+
+# Global code owners - will be requested for all changes
+* @monemnaifer
+
+# Documentation
+/Doc/ @monemnaifer
+*.md @monemnaifer
+/CONTRIBUTING.md @monemnaifer
+/README.md @monemnaifer
+
+# GitHub configuration
+/.github/ @monemnaifer
+
+# Root configuration files
+/.gitignore @monemnaifer
+/package*.json @monemnaifer
+/*.config.* @monemnaifer
+/*.json @monemnaifer
+
+# Frontend application
+/rotary-club-tunis/ @monemnaifer
+
+# Frontend specific
+/rotary-club-tunis/src/app/ @monemnaifer
+/rotary-club-tunis/src/components/ @monemnaifer
+/rotary-club-tunis/src/lib/ @monemnaifer
+
+# Backend/CMS specific
+/rotary-club-tunis/src/collections/ @monemnaifer
+/rotary-club-tunis/src/payload.config.ts @monemnaifer
+
+# Authentication and security
+/rotary-club-tunis/src/lib/auth.ts @monemnaifer
+/rotary-club-tunis/src/middleware/ @monemnaifer
+/rotary-club-tunis/src/app/api/auth/ @monemnaifer
+
+# Testing
+/rotary-club-tunis/src/__tests__/ @monemnaifer
+/rotary-club-tunis/src/**/__tests__/ @monemnaifer
+*.test.* @monemnaifer
+/jest.config.js @monemnaifer
+
+# Configuration files
+/rotary-club-tunis/next.config.ts @monemnaifer
+/rotary-club-tunis/tsconfig.json @monemnaifer
+/rotary-club-tunis/eslint.config.mjs @monemnaifer
+/rotary-club-tunis/postcss.config.mjs @monemnaifer
+/rotary-club-tunis/components.json @monemnaifer
+
+# Security-sensitive files
+/rotary-club-tunis/src/lib/auth.ts @monemnaifer
+/rotary-club-tunis/src/middleware.ts @monemnaifer
+*.env* @monemnaifer
+
+# Note: Add additional team members as the project grows
+# Example:
+# /rotary-club-tunis/src/components/ui/ @ui-specialist
+# /rotary-club-tunis/src/collections/ @backend-lead
+# /Doc/04-Technical/ @tech-writer
