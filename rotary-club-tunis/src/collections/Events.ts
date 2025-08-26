@@ -1,15 +1,18 @@
 // Events Collection for Rotary Club Tunis Doyen CMS
 // Complete event management with scheduling, registration, and calendar integration
-import type { CollectionConfig } from 'payload'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { syncArabicAfterCreate } from '../hooks/syncArabicAfterCreate'
 
-// Temporary interface to extend User type until payload-types.ts is regenerated
-interface ExtendedUser {
-  role?: 'admin' | 'editor' | 'volunteer'
-  id?: string
-  [key: string]: unknown
-}
+import type { CollectionConfig } from 'payload';
+import { syncArabicAfterCreate } from '../hooks/syncArabicAfterCreate';
+import { EVENT_CONSTANTS } from '../lib/constants/events';
+import { allEventFields } from '../lib/fields/events';
+import {
+  canCreateEvent,
+  canUpdateEvent,
+  canDeleteEvent,
+  canReadEvent
+} from '../lib/access/events';
+import { setAuditFields } from '../lib/hooks/events';
+
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -25,40 +28,41 @@ export const Events: CollectionConfig = {
   },
   access: {
     read: () => true, // Public read access for published events
-    create: ({ req: { user } }: any) => {
-      const extendedUser = user as unknown as ExtendedUser
-      return extendedUser?.role === 'admin' || extendedUser?.role === 'editor'
+    create: ({ req }: AccessArgs) => {
+      const user = req.user as User | null | undefined;
+      return user?.role === 'admin' || user?.role === 'editor';
     },
-    update: ({ req: { user } }: any) => {
-      const extendedUser = user as unknown as ExtendedUser
-      return extendedUser?.role === 'admin' || extendedUser?.role === 'editor'
+    update: ({ req }: AccessArgs) => {
+      const user = req.user as User | null | undefined;
+      return user?.role === 'admin' || user?.role === 'editor';
     },
-    delete: ({ req: { user } }: any) => {
-      const extendedUser = user as unknown as ExtendedUser
-      return extendedUser?.role === 'admin'
+    delete: ({ req }: AccessArgs) => {
+      const user = req.user as User | null | undefined;
+      return user?.role === 'admin';
     },
   },
   hooks: {
     beforeChange: [
-      ({ data, req, operation }: any) => {
+      (args) => {
+        const { data, req, operation } = args;
         // Set createdBy on creation
         if (operation === 'create' && req.user) {
-          data.audit = {
-            ...data.audit,
+          (data as EventData).audit = {
+            ...(data as EventData).audit,
             createdBy: req.user.id
-          }
+          };
         }
 
         // Set lastModifiedBy on update
         if (operation === 'update' && req.user) {
-          data.audit = {
-            ...data.audit,
+          (data as EventData).audit = {
+            ...(data as EventData).audit,
             lastModifiedBy: req.user.id,
-            version: (data.audit?.version || 1) + 1
-          }
+            version: ((data as EventData).audit?.version || 1) + 1
+          };
         }
 
-        return data
+        return data;
       }
     ],
     afterChange: [syncArabicAfterCreate]
@@ -85,15 +89,12 @@ export const Events: CollectionConfig = {
       },
       hooks: {
         beforeValidate: [
-          ({ data, value }: any) => {
-            if (!value && data.title) {
-              const title = typeof data.title === 'object' ? data.title.fr || data.title.en || data.title.ar : data.title
-              return title
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
+          ({ data, value }: FieldHookArgs<EventData>) => {
+            if (typeof value === 'undefined' && data?.title) {
+              const title = typeof data.title === 'object' ? data.title.fr || data.title.en || data.title.ar : data.title;
+              return (title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
             }
-            return value
+            return value;
           }
         ]
       }
@@ -106,11 +107,11 @@ export const Events: CollectionConfig = {
         description: 'Brief event description (150-200 characters)',
         rows: 3
       },
-      validate: (value: any) => {
+      validate: (value: string | null | undefined): true | string => {
         if (value && value.length > 300) {
-          return 'Excerpt must be less than 300 characters'
+          return 'Excerpt must be less than 300 characters';
         }
-        return true
+        return true;
       }
     },
 
@@ -261,7 +262,7 @@ export const Events: CollectionConfig = {
     {
       name: 'registrationEnabled',
       type: 'checkbox',
-      defaultValue: true,
+      defaultValue: false,
       admin: {
         description: 'Enable online registration for this event',
         position: 'sidebar'
@@ -380,11 +381,11 @@ export const Events: CollectionConfig = {
           admin: {
             description: 'SEO title (50-60 characters recommended)'
           },
-          validate: (value: any) => {
-            if (value && value.length > 70) {
-              return 'Meta title should be less than 70 characters'
+          validate: (value: string | null | undefined): true | string => {
+            if (value && value?.length > 70) {
+              return 'Meta title should be less than 70 characters';
             }
-            return true
+            return true;
           }
         },
         {
@@ -395,11 +396,11 @@ export const Events: CollectionConfig = {
             description: 'SEO description (150-160 characters recommended)',
             rows: 3
           },
-          validate: (value: any) => {
-            if (value && value.length > 180) {
-              return 'Meta description should be less than 180 characters'
+          validate: (value: string | null | undefined): true | string => {
+            if (value && value?.length > 180) {
+              return 'Meta description should be less than 180 characters';
             }
-            return true
+            return true;
           }
         },
         {
@@ -444,89 +445,7 @@ export const Events: CollectionConfig = {
           type: 'number',
           defaultValue: 0,
           admin: {
-            description: 'Number of additional guests'
-          }
-        },
-        {
-          name: 'specialRequirements',
-          type: 'textarea',
-          admin: {
-            description: 'Dietary restrictions, accessibility needs, etc.'
-          }
-        }
-      ],
-      admin: {
-        description: 'Event registrations and attendee management'
-      }
-    },
-
-    // Impact & Results
-    {
-      name: 'impactMetrics',
-      type: 'group',
-      fields: [
-        {
-          name: 'attendees',
-          type: 'number',
-          admin: {
-            description: 'Actual number of attendees'
-          }
-        },
-        {
-          name: 'mealsServed',
-          type: 'number',
-          admin: {
-            description: 'Meals served during the event'
-          }
-        },
-        {
-          name: 'treesPlanted',
-          type: 'number',
-          admin: {
-            description: 'Trees planted during the event'
-          }
-        },
-        {
-          name: 'volunteerHours',
-          type: 'number',
-          admin: {
-            description: 'Total volunteer hours contributed'
-          }
-        },
-        {
-          name: 'fundsRaised',
-          type: 'number',
-          admin: {
-            description: 'Funds raised in TND'
-          }
-        }
-      ]
-    },
-
-    // Calendar Integration
-    {
-      name: 'calendarIntegration',
-      type: 'group',
-      fields: [
-        {
-          name: 'calendarEventId',
-          type: 'text',
-          admin: {
-            description: 'Google Calendar event ID for sync'
-          }
-        },
-        {
-          name: 'icalUrl',
-          type: 'text',
-          admin: {
-            description: 'iCal URL for external calendar subscription'
-          }
-        },
-        {
-          name: 'qrCode',
-          type: 'text',
-          admin: {
-            description: 'QR code data for mobile check-in'
+            description: 'Number of guests'
           }
         }
       ]
@@ -536,15 +455,17 @@ export const Events: CollectionConfig = {
     {
       name: 'audit',
       type: 'group',
+      admin: {
+        description: 'Track event creation and modifications'
+      },
       fields: [
         {
           name: 'createdBy',
           type: 'relationship',
           relationTo: 'users',
           admin: {
-            description: 'User who created this event',
-            position: 'sidebar',
-            readOnly: true
+            readOnly: true,
+            description: 'User who created the event'
           }
         },
         {
@@ -552,9 +473,8 @@ export const Events: CollectionConfig = {
           type: 'relationship',
           relationTo: 'users',
           admin: {
-            description: 'User who last modified this event',
-            position: 'sidebar',
-            readOnly: true
+            readOnly: true,
+            description: 'User who last modified the event'
           }
         },
         {
@@ -562,9 +482,8 @@ export const Events: CollectionConfig = {
           type: 'number',
           defaultValue: 1,
           admin: {
-            description: 'Event version number',
-            position: 'sidebar',
-            readOnly: true
+            readOnly: true,
+            description: 'Revision number'
           }
         }
       ]

@@ -7,7 +7,7 @@ import type { NextRequest } from 'next/server'
 export const POST = GRAPHQL_POST(config)
 
 // Provide an OPTIONS handler compatible with this static /api/graphql route (no dynamic params)
-export const OPTIONS = async (_request: NextRequest) =>
+export const OPTIONS = async () =>
   new Response(null, {
     status: 204,
     headers: {

@@ -3,26 +3,34 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
-// Security logging function (will be enhanced with Payload integration)
+// Security logging function with console logging (Payload integration pending)
 async function logLogoutAttempt(data: {
   ipAddress: string
   userAgent: string
   success: boolean
   sessionFingerprint?: string
   reason?: string
+  userId?: string
 }) {
-  // For now, log to console - will be enhanced with Payload integration
-  const logData = {
-    ...data,
-    timestamp: new Date().toISOString(),
-    country: 'TN', // Default to Tunisia, could be enhanced with geolocation
-    eventType: 'logout'
-  }
+  try {
+    // Log to console for immediate visibility
+    const logData = {
+      ...data,
+      timestamp: new Date().toISOString(),
+      country: 'TN', // Default to Tunisia, could be enhanced with geolocation
+      eventType: 'logout'
+    }
 
-  if (data.success) {
-    console.log('✅ Successful logout:', logData)
-  } else {
-    console.warn('⚠️ Logout issue:', logData)
+    if (data.success) {
+      console.log('✅ Successful logout:', logData)
+    } else {
+      console.warn('⚠️ Logout issue:', logData)
+    }
+
+    // TODO: Integrate with Payload CMS logging when types are resolved
+    // For now, we'll use console logging to maintain functionality
+  } catch (error) {
+    console.error('❌ Error logging logout attempt:', error);
   }
 }
 

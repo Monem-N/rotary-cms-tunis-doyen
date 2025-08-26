@@ -1,0 +1,459 @@
+// Articles Collection for Rotary Club Tunis Doyen CMS
+// Multi-language content management with Arabic RTL support
+import type { CollectionConfig, AccessArgs, FieldHookArgs } from 'payload'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+
+// Type definitions for better type safety
+interface User {
+  id: string
+  email: string
+  role?: 'admin' | 'editor' | 'volunteer'
+}
+
+interface PayloadRequest {
+  user?: User | null
+  payload?: any
+}
+
+interface AccessContext {
+  req: PayloadRequest
+}
+
+interface FieldData {
+  title?: string | { [key: string]: string }
+  content?: any
+  audit?: {
+    createdBy?: string
+    lastModifiedBy?: string
+    version?: number
+  }
+  engagement?: {
+    readingTime?: number
+  }
+}
+
+interface HookContext {
+  data: FieldData
+  req: PayloadRequest
+  operation: 'create' | 'update' | 'delete'
+}
+
+interface AfterChangeContext {
+  doc: FieldData & { title?: string }
+  req: PayloadRequest
+  operation: 'create' | 'update' | 'delete'
+}
+
+const Articles: CollectionConfig = {
+  slug: 'articles',
+  labels: {
+    singular: 'Article',
+    plural: 'Articles'
+  },
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'category', 'status', 'author', 'updatedAt'],
+    group: 'Content Management',
+    description: 'Create and manage multi-language articles with SEO optimization'
+  },
+  access: {
+    // Role-based access control
+    read: () => true, // Public read access for published articles
+    create: ({ req: { user } }: AccessContext) =>
+      user && (user.role === 'admin' || user.role === 'editor'),
+    update: ({ req: { user } }: AccessContext) =>
+      user && (user.role === 'admin' || user.role === 'editor'),
+    delete: ({ req: { user } }: AccessContext) =>
+      user && user.role === 'admin'
+  },
+  fields: [
+    // Basic Information
+    {
+      name: 'title',
+      type: 'text',
+      required: true,
+      localized: true,
+      admin: {
+        description: 'Article title in French, Arabic, and English'
+      }
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        description: 'URL-friendly identifier (auto-generated from title)',
+        position: 'sidebar'
+      },
+      hooks: {
+        beforeValidate: [
+          ({ data, value }: FieldHookArgs) => {
+            if (!value && data.title) {
+              // Generate slug from title (French as default)
+              const title = typeof data.title === 'object' ? data.title.fr || data.title.en || data.title.ar : data.title
+              return title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+            }
+            return value
+          }
+        ]
+      }
+    },
+    {
+      name: 'excerpt',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Brief summary of the article (150-200 characters)',
+        rows: 3
+      },
+      validate: (value: string | undefined) => {
+        if (value && value.length > 300) {
+          return 'Excerpt must be less than 300 characters'
+        }
+        return true
+      }
+    },
+
+    // Content
+    {
+      name: 'content',
+      type: 'richText',
+      required: true,
+      localized: true,
+      editor: lexicalEditor(),
+      admin: {
+        description: 'Main article content with rich text formatting. Guidelines: Use clear, concise language appropriate for Rotary Club audience. Include relevant images or media to enhance engagement. For Arabic content, ensure proper RTL formatting. Maintain professional tone and Rotary Club values.'
+      }
+    },
+
+    // Media
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Main image for the article (recommended: 1200x600px)',
+        position: 'sidebar'
+      }
+    },
+    {
+      name: 'gallery',
+      type: 'array',
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true
+        },
+        {
+          name: 'caption',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'Image caption in multiple languages'
+          }
+        },
+        {
+          name: 'altText',
+          type: 'text',
+          localized: t      }
+    },
+
+    // Media
+    {
+      name: 'featuredImage',
+      type: 'upload',
+      relatility (required for WCAG compliance)'
+          }
+        }
+      ],
+      admin: {
+        description: 'Additional images for the article gallery'
+      }
+    },
+
+    // Organization
+    {
+      name: 'category',
+      type: 'select',
+      required: true,
+      options: [
+        { label: 'Actualités Rotary', value: 'rotary-news' },
+        { label: 'Événements', value: 'events' },
+        { label: 'Projets Humanitaires', value: 'humanitarian' },
+        { label: 'Formation & Développement', value: 'training' },
+        { label: 'Partenariats', value: 'partnerships' },
+        { label: 'Témoignages', value: 'testimonials' },
+        { label: 'Annonces', value: 'announcements' },
+        { label: 'Autre', value: 'other' }
+      ],
+      admin: {
+        description: 'Article category for organization and filtering',
+        position: 'sidebar'
+      }
+    },
+    {
+      name: 'tags',
+      type: 'select',
+      hasMany: true,
+      options: [
+        // Rotary-specific tags
+        { label: 'Rotary International', value: 'rotary-international' },
+        { label: 'Club Tunis Doyen', value: 'club-tunis-doyen' },
+        { label: 'Service Humanitaire', value: 'humanitarian-service' },
+        { label: 'Développement Communautaire', value: 'community-development' },
+        { label: 'Jeunesse', value: 'youth' },
+        { label: 'Éducation', value: 'education' },
+        { label: 'Santé', value: 'health' },
+        { label: 'Environnement', value: 'environment' },
+        { label: 'Paix', value: 'peace' },
+        { label: 'Économie', value: 'economy' },
+        // Content types
+        { label: 'Interview', value: 'interview' },
+        { label: 'Reportage', value: 'reportage' },
+        { label: 'Communiqué', value: 'press-release' },
+        { label: 'Tribune Libre', value: 'opinion' }
+      ],
+      admin: {
+        description: 'Tags for better content discovery and SEO'
+      }
+    },
+
+    // SEO Optimization
+    {
+      name: 'seo',
+      type: 'group',
+      fields: [
+        {
+          name: 'metaTitle',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'SEO title (50-60 characters recommended)'
+          },
+          validate: (value: string | undefined) => {
+            if (value && value.length > 70) {
+              return 'Meta title should be less than 70 characters for optimal SEO'
+            }
+            return true
+          }
+        },
+        {
+          name: 'metaDescription',
+          type: 'textarea',
+          localized: true,
+          admin: {
+            description: 'SEO description (150-160 characters recommended)',
+            rows: 3
+          },
+          validate: (value: string | undefined) => {
+            if (value && value.length > 180) {
+              return 'Meta description should be less than 180 characters for optimal SEO'
+            }
+            return true
+          }
+        },
+        {
+          name: 'keywords',
+          type: 'text',
+          localized: true,
+          admin: {
+            description: 'SEO keywords (comma-separated, 5-10 keywords recommended)'
+          }
+        },
+        {
+          name: 'canonicalUrl',
+          type: 'text',
+          admin: {
+            description: 'Canonical URL for SEO (usually auto-generated)'
+          }
+        }
+      ],
+      admin: {
+        description: 'Search Engine Optimization settings',
+        position: 'sidebar'
+      }
+    },
+
+    // Publication Workflow
+    {
+      name: 'status',
+      type: 'select',
+      required: true,
+      defaultValue: 'draft',
+      options: [
+        { label: 'Brouillon', value: 'draft' },
+        { label: 'En Révision', value: 'review' },
+        { label: 'Publié', value: 'published' },
+        { label: 'Archivé', value: 'archived' }
+      ],
+      admin: {
+        description: 'Publication status of the article',
+        position: 'sidebar'
+      }
+    },
+    {
+      name: 'publishDate',
+      type: 'date',
+      admin: {
+        description: 'Scheduled publication date (leave empty for immediate publication)',
+        position: 'sidebar',
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy'
+        }
+      }
+    },
+    {
+      name: 'author',
+      type: 'relationship',
+      relationTo: 'users',
+      required: true,
+      admin: {
+        description: 'Article author',
+        position: 'sidebar'
+      }
+    },
+    {
+      name: 'reviewer',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        description: 'Person who reviewed the article before publication',
+        position: 'sidebar'
+      }
+    },
+
+    // Engagement & Analytics
+    {
+      name: 'engagement',
+      type: 'group',
+      fields: [
+        {
+          name: 'readingTime',
+          type: 'number',
+          admin: {
+            description: 'Estimated reading time in minutes (auto-calculated)',
+            position: 'sidebar'
+          }
+        },
+        {
+          name: 'featured',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: {
+            description: 'Mark as featured article (appears prominently)',
+            position: 'sidebar'
+          }
+        },
+        {
+          name: 'allowComments',
+          type: 'checkbox',
+          defaultValue: true,
+          admin: {
+            description: 'Allow comments on this article',
+            position: 'sidebar'
+          }
+        }
+      ]
+    },
+
+    // Audit Trail
+    {
+      name: 'audit',
+      type: 'group',
+      fields: [
+        {
+          name: 'createdBy',
+          type: 'relationship',
+          relationTo: 'users',
+          admin: {
+            description: 'User who created this article',
+            position: 'sidebar',
+            readOnly: true
+          }
+        },
+        {
+          name: 'lastModifiedBy',
+          type: 'relationship',
+          relationTo: 'users',
+          admin: {
+            description: 'User who last modified this article',
+            position: 'sidebar',
+            readOnly: true
+          }
+        },
+        {
+          name: 'version',
+          type: 'number',
+          defaultValue: 1,
+          admin: {
+            description: 'Article version number',
+            position: 'sidebar',
+            readOnly: true
+          }
+        }
+      ]
+    }
+  ],
+
+  // Hooks for automation and workflow
+  hooks: {
+    beforeChange: [
+      ({ data, req, operation }: HookContext) => {
+        // Set createdBy on creation
+        if (operation === 'create' && req.user) {
+          data.audit = {
+            ...data.audit,
+            createdBy: req.user.id
+          }
+        }
+
+        // Set lastModifiedBy on update
+        if (operation === 'update' && req.user) {
+          data.audit = {
+            ...data.audit,
+            lastModifiedBy: req.user.id,
+            version: (data.audit?.version || 1) + 1
+          }
+        }
+
+        // Auto-calculate reading time
+        if (data.content) {
+          const wordCount = JSON.stringify(data.content).split(' ').length
+          const readingTime = Math.ceil(wordCount / 200) // Average 200 words per minute
+          data.engagement = {
+            ...data.engagement,
+            readingTime: readingTime > 0 ? readingTime : 1
+          }
+        }
+
+        return data
+      }
+    ],
+    afterChange: [
+      // Log article changes for audit trail
+      ({ doc, req, operation }: AfterChangeContext) => {
+        if (req.user) {
+          console.log(`Article ${operation}: ${doc.title} by ${req.user.email}`)
+        }
+      }
+    ]
+  },
+
+  // Versions for content history
+  versions: {
+    drafts: true,
+    maxPerDoc: 20
+  },
+
+  // Timestamps
+  timestamps: true
+}
+
+export default Articles

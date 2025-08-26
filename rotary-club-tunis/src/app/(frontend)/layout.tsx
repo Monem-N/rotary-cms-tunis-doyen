@@ -1,5 +1,7 @@
 import React from 'react'
 import { Open_Sans } from 'next/font/google'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import './styles.css'
 
 // Load Rotary-approved fonts (free alternatives only)
@@ -13,20 +15,29 @@ const openSans = Open_Sans({
 })
 
 export const metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
-  title: 'Payload Blank Template',
+  description: 'Rotary Club Tunis Doyen - Service Above Self',
+  title: 'Rotary Club Tunis Doyen',
 }
 
-export default async function RootLayout(props: { children: React.ReactNode }) {
-  const { children } = props
+export default async function RootLayout(props: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  const { children, params } = props
+  const { locale } = await params
+
+  // Get messages for the current locale
+  const messages = await getMessages()
 
   return (
-    <html lang="en">
+    <html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
       <body
         className={`min-h-dvh bg-background text-foreground font-sans antialiased ${openSans.variable}`}
         suppressHydrationWarning={true}
       >
-        <main className="min-h-dvh">{children}</main>
+        <NextIntlClientProvider messages={messages}>
+          <main className="min-h-dvh">{children}</main>
+        </NextIntlClientProvider>
       </body>
     </html>
   )

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -85,6 +85,7 @@ export default function LoginForm({
   const [csrfToken, setCsrfToken] = useState<string>('');
   const [csrfError, setCsrfError] = useState<string>('');
   const router = useRouter();
+  const firstErrorRef = useRef<HTMLDivElement>(null);
 
   const t = messages[locale];
 
@@ -157,12 +158,25 @@ export default function LoginForm({
 
       if (response.ok && data.success) {
         // Successful login
-        if (onSuccess) {
-          onSuccess();
-        } else {
-          router.push(redirectTo);
-          router.refresh();
-        }
+
+        // Announce success to screen readers
+        const announcement = document.createElement('div');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.setAttribute('aria-atomic', 'true');
+        announcement.textContent = locale === 'ar' ? 'تم تسجيل الدخول بنجاح. جاري التوجيه...' :
+                                  locale === 'en' ? 'Login successful. Redirecting...' :
+                                  'Connexion réussie. Redirection...';
+        document.body.appendChild(announcement);
+
+        setTimeout(() => {
+          document.body.removeChild(announcement);
+          if (onSuccess) {
+            onSuccess();
+          } else {
+            router.push(redirectTo);
+            router.refresh();
+          }
+        }, 1000);
       } else {
         // Handle different error types
         let errorMessage = t.errors.loginFailed;
@@ -178,6 +192,13 @@ export default function LoginForm({
         }
 
         setErrors({ general: errorMessage });
+
+        // Focus first error for accessibility
+        setTimeout(() => {
+          if (firstErrorRef.current) {
+            firstErrorRef.current.focus();
+          }
+        }, 100);
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -211,9 +232,11 @@ export default function LoginForm({
         >
           {(errors.general || csrfError) && (
             <div
+              ref={firstErrorRef}
               className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md"
               role="alert"
               aria-live="polite"
+              tabIndex={-1}
             >
               {errors.general || csrfError}
             </div>
@@ -289,6 +312,19 @@ export default function LoginForm({
           <div id="login-status" className="sr-only" aria-live="polite">
             {!csrfToken && 'Loading security token...'}
             {isLoading && 'Processing login...'}
+          </div>
+
+          {/* Forgot Password Link */}
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => router.push('/forgot-password')}
+              className="text-sm text-primary hover:text-primary/80 underline"
+            >
+              {locale === 'ar' ? 'نسيت كلمة المرور؟' :
+               locale === 'en' ? 'Forgot your password?' :
+               'Mot de passe oublié ?'}
+            </button>
           </div>
         </form>
       </CardContent>

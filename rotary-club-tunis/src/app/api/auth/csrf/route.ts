@@ -18,7 +18,7 @@ function cleanupExpiredTokens(): void {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Generate a session identifier (in production, use actual session ID)
     const sessionId = crypto.randomBytes(16).toString('hex');

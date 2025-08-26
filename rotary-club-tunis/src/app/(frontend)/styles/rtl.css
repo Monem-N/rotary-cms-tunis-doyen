@@ -1,0 +1,351 @@
+/* ===========================================
+   ARABIC RTL FRAMEWORK
+   Comprehensive Right-to-Left Support
+   =========================================== */
+
+/* Base RTL Setup */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Arabic Typography */
+[dir="rtl"] {
+  font-family: 'Tajawal', 'Noto Naskh Arabic', 'Arial Unicode MS', sans-serif;
+}
+
+/* Arabic Text Enhancements */
+.arabic-text {
+  font-family: 'Tajawal', 'Noto Naskh Arabic', serif;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  text-align: right;
+}
+
+/* RTL Layout Utilities */
+.rtl-flex {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.rtl-flex-col {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+/* Container Adjustments */
+[dir="rtl"] .container {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+[dir="rtl"] .max-w-7xl {
+  margin-right: auto;
+  margin-left: auto;
+}
+
+/* Navigation RTL */
+[dir="rtl"] .nav-menu {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-item {
+  margin-left: 0;
+  margin-right: 2rem;
+}
+
+[dir="rtl"] .nav-item:first-child {
+  margin-right: 0;
+}
+
+/* Button RTL */
+[dir="rtl"] .btn-icon {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+[dir="rtl"] .btn-icon-right {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+/* Form Elements RTL */
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="password"],
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="rtl"] .form-label {
+  text-align: right;
+}
+
+[dir="rtl"] .form-group {
+  direction: rtl;
+}
+
+/* Card RTL */
+[dir="rtl"] .card-header {
+  text-align: right;
+}
+
+[dir="rtl"] .card-actions {
+  flex-direction: row-reverse;
+}
+
+/* Hero Section RTL */
+[dir="rtl"] .hero-content {
+  text-align: right;
+}
+
+[dir="rtl"] .hero-stats {
+  flex-direction: row-reverse;
+}
+
+/* Event Cards RTL */
+[dir="rtl"] .event-date {
+  text-align: right;
+}
+
+[dir="rtl"] .event-location {
+  text-align: right;
+}
+
+/* Article Cards RTL */
+[dir="rtl"] .article-meta {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+/* Footer RTL */
+[dir="rtl"] .footer-links {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+/* Mobile Menu RTL */
+[dir="rtl"] .mobile-menu {
+  right: 0;
+  left: auto;
+}
+
+/* Dropdown RTL */
+[dir="rtl"] .dropdown-menu {
+  right: 0;
+  left: auto;
+  text-align: right;
+}
+
+/* Breadcrumbs RTL */
+[dir="rtl"] .breadcrumb {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .breadcrumb-separator {
+  transform: rotate(180deg);
+}
+
+/* Pagination RTL */
+[dir="rtl"] .pagination {
+  flex-direction: row-reverse;
+}
+
+/* Search RTL */
+[dir="rtl"] .search-input {
+  text-align: right;
+}
+
+[dir="rtl"] .search-icon {
+  right: 1rem;
+  left: auto;
+}
+
+/* Social Media RTL */
+[dir="rtl"] .social-links {
+  flex-direction: row-reverse;
+}
+
+/* Loading States RTL */
+[dir="rtl"] .loading-spinner {
+  margin-left: 0.5rem;
+  margin-right: 0;
+}
+
+/* Error Messages RTL */
+[dir="rtl"] .error-message {
+  text-align: right;
+}
+
+/* Modal RTL */
+[dir="rtl"] .modal-content {
+  text-align: right;
+}
+
+[dir="rtl"] .modal-close {
+  left: 1rem;
+  right: auto;
+}
+
+/* Tables RTL */
+[dir="rtl"] table {
+  text-align: right;
+}
+
+[dir="rtl"] th,
+[dir="rtl"] td {
+  text-align: right;
+}
+
+/* Images with RTL */
+[dir="rtl"] .image-caption {
+  text-align: right;
+}
+
+/* Lists RTL */
+[dir="rtl"] ul,
+[dir="rtl"] ol {
+  padding-right: 1.5rem;
+  padding-left: 0;
+}
+
+/* Quotes RTL */
+[dir="rtl"] blockquote {
+  border-right: 4px solid #e5e7eb;
+  border-left: none;
+  padding-right: 1rem;
+  padding-left: 0;
+  text-align: right;
+}
+
+/* Code Blocks RTL */
+[dir="rtl"] code,
+[dir="rtl"] pre {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Animations RTL */
+[dir="rtl"] .slide-in-left {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+[dir="rtl"] .slide-in-right {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+/* Hover Effects RTL */
+[dir="rtl"] .hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Focus States RTL */
+[dir="rtl"] .focus-visible:focus-visible {
+  outline-offset: 2px;
+}
+
+/* Print Styles RTL */
+@media print {
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="rtl"] .no-print {
+    display: none;
+  }
+}
+
+/* Accessibility RTL */
+[dir="rtl"] .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Screen Reader Announcements RTL */
+[dir="rtl"] .sr-announce {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Focus Management RTL */
+[dir="rtl"] .focus-trap:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Skip Links RTL */
+[dir="rtl"] .skip-link {
+  position: absolute;
+  top: -40px;
+  right: 6px;
+  left: auto;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+[dir="rtl"] .skip-link:focus {
+  top: 6px;
+}
+
+/* Cultural Adaptations for Tunisia */
+[dir="rtl"] .tunisian-currency {
+  font-family: 'Arial', sans-serif;
+}
+
+[dir="rtl"] .phone-number {
+  direction: ltr;
+  text-align: left;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Islamic Calendar Support */
+[dir="rtl"] .islamic-date {
+  font-family: 'Arial', sans-serif;
+  direction: ltr;
+}
+
+/* Performance Optimizations */
+[dir="rtl"] * {
+  box-sizing: border-box;
+}
+
+/* Reduce Repaints */
+[dir="rtl"] .optimized-text {
+  will-change: auto;
+  transform: translateZ(0);
+}
+
+/* Font Loading Optimization */
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal-Regular.woff2') format('woff2'),
+       url('/fonts/Tajawal-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Tajawal';
+  src: url('/fonts/Tajawal-Bold.woff2') format('woff2'),
+       url('/fonts/Tajawal-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

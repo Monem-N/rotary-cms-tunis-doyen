@@ -15,7 +15,7 @@ export const Media: CollectionConfig = {
     group: 'Media',
   },
   access: {
-    read: ({ req: { user } }) => {
+    read: ({ req }) => {
       // Public can read, but we'll handle GDPR compliance in hooks
       return true;
     },
@@ -127,7 +127,7 @@ export const Media: CollectionConfig = {
   ],
   hooks: {
     beforeChange: [
-      ({ data, operation }) => {
+      ({ data }) => {
         // Validation: consentDate is required when consentGiven is true
         if (data.consentGiven && !data.consentDate) {
           throw new Error('La date de consentement est requise lorsque le consentement est donné');

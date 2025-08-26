@@ -257,7 +257,7 @@ describe('Retry Utilities', () => {
       let networkError: Error;
       try {
         networkError = new Error('Connection timeout');
-      } catch (err) {
+      } catch {
         // If creating Error fails, skip this test
         console.warn('Skipping test due to Jest environment issue');
         return;

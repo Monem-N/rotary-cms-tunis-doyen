@@ -301,10 +301,12 @@ if (typeof globalThis !== 'undefined') {
   }, 60 * 1000);
 }
 
-export default {
+const performanceUtils = {
   loginRateLimiter,
   AuthPerformanceOptimizer,
   MemoryMonitor,
   tunisiaNetworkOptimizations,
   HealthChecker,
 };
+
+export default performanceUtils;

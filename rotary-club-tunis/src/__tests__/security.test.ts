@@ -3,7 +3,7 @@
  * Tests for authentication, rate limiting, and security features
  */
 
-import { describe, test, expect, beforeEach, afterEach } from '@jest/globals';
+import { describe, test, expect, beforeEach } from '@jest/globals';
 
 // Mock fetch for API testing
 const mockFetch = jest.fn();

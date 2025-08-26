@@ -168,7 +168,6 @@ class AuthenticationTester {
       })
 
       if (result.status === 401) {
-        consecutiveFailures++
         this.log(`Attempt ${i}: Invalid credentials (${result.responseTime}ms)`, 'info')
       } else if (result.status === 429) {
         this.log(`✅ Rate limiting triggered after ${i} attempts (${result.responseTime}ms)`, 'success')

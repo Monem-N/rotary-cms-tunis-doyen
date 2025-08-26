@@ -1,0 +1,194 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "events": "Événements",
+    "articles": "Articles",
+    "contact": "Contact",
+    "admin": "Administration",
+    "language": "Langue"
+  },
+  "hero": {
+    "title": "Rotary Club Tunis Doyen",
+    "subtitle": "Service Above Self - الخدمة فوق الذات",
+    "description": "Fondé en 1929, nous sommes le premier club Rotary de Tunisie. Ensemble, nous transformons des vies et renforçons nos communautés locales et internationales.",
+    "primaryCTA": "Rejoignez-nous",
+    "secondaryCTA": "En savoir plus",
+    "stats": {
+      "years": "95+",
+      "yearsLabel": "Années de service",
+      "projects": "500+",
+      "projectsLabel": "Projets communautaires",
+      "volunteers": "1000+",
+      "volunteersLabel": "Bénévoles"
+    },
+    "rotaryNetwork": "Partie du réseau Rotary International"
+  },
+  "about": {
+    "title": "À propos de nous",
+    "subtitle": "Découvrez Rotary Club Tunis Doyen",
+    "description": "Le Rotary Club Tunis Doyen, fondé en 1929, est fier d'être le premier club Rotary de Tunisie. Notre engagement envers le service communautaire et le développement international fait de nous un pilier de la société tunisienne.",
+    "missionText": "Servir les communautés locales et internationales à travers des projets humanitaires, éducatifs et économiques.",
+    "values": "Nos valeurs",
+    "valuesList": [
+      "Intégrité",
+      "Service",
+      "Leadership",
+      "Diversité",
+      "Solidarité"
+    ],
+    "stats": {
+      "years": "95+",
+      "yearsLabel": "Années d'excellence",
+      "projects": "500+",
+      "projectsLabel": "Projets communautaires",
+      "volunteers": "1000+",
+      "volunteersLabel": "Bénévoles"
+    },
+    "ctaText": "Rejoignez-nous",
+    "features": {
+      "humanitarian": {
+        "title": "Service humanitaire",
+        "description": "Nous participons à des projets internationaux pour combattre les maladies et la pauvreté"
+      },
+      "friendship": {
+        "title": "Liens d'amitié",
+        "description": "Nous construisons des amitiés durables entre les peuples et les cultures"
+      },
+      "excellence": {
+        "title": "Excellence locale",
+        "description": "Nous servons notre communauté locale et contribuons à son développement"
+      }
+    }
+  },
+  "events": {
+    "title": "Événements à venir",
+    "description": "Découvrez nos prochains événements et activités communautaires.",
+    "upcoming": "Événements à venir",
+    "past": "Événements passés",
+    "register": "S'inscrire",
+    "details": "Détails",
+    "date": "Date",
+    "time": "Heure",
+    "location": "Lieu",
+    "capacity": "Capacité",
+    "spotsLeft": "places restantes",
+    "full": "Complet",
+    "noEvents": "Aucun événement prévu pour le moment.",
+    "viewAll": "Voir tous les événements"
+  },
+  "articles": {
+    "title": "Articles & Actualités",
+    "description": "Restez informé des dernières nouvelles et activités de notre club.",
+    "readMore": "Lire la suite",
+    "published": "Publié le",
+    "by": "par",
+    "category": "Catégorie",
+    "tags": "Étiquettes",
+    "search": "Rechercher des articles...",
+    "noArticles": "Aucun article trouvé.",
+    "viewAll": "Voir tous les articles",
+    "recent": "Articles récents"
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "description": "Nous sommes là pour vous aider. N'hésitez pas à nous contacter pour toute question ou suggestion.",
+    "form": {
+      "name": "Nom complet",
+      "email": "Adresse e-mail",
+      "subject": "Sujet",
+      "message": "Message",
+      "send": "Envoyer",
+      "sending": "Envoi en cours...",
+      "success": "Message envoyé avec succès !",
+      "error": "Erreur lors de l'envoi du message."
+    },
+    "info": {
+      "title": "Informations de contact",
+      "address": "Adresse",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "hours": "Heures d'ouverture"
+    },
+    "social": {
+      "title": "Suivez-nous",
+      "facebook": "Facebook",
+      "twitter": "Twitter",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "description": "Connectez-vous à votre compte Rotary",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "button": "Se connecter",
+      "loading": "Connexion en cours...",
+      "forgotPassword": "Mot de passe oublié ?",
+      "errors": {
+        "required": "Ce champ est requis",
+        "invalidEmail": "Adresse e-mail invalide",
+        "failed": "Email ou mot de passe incorrect",
+        "rateLimit": "Trop de tentatives. Réessayez plus tard.",
+        "locked": "Compte temporairement verrouillé",
+        "network": "Erreur de réseau. Veuillez réessayer."
+      }
+    },
+    "reset": {
+      "request": {
+        "title": "Réinitialiser le mot de passe",
+        "description": "Entrez votre adresse e-mail pour recevoir un lien de réinitialisation",
+        "button": "Envoyer le lien de réinitialisation",
+        "success": "Si un compte existe avec cette adresse, un lien de réinitialisation a été envoyé.",
+        "backToLogin": "Retour à la connexion"
+      },
+      "confirm": {
+        "title": "Nouveau mot de passe",
+        "description": "Entrez votre nouveau mot de passe",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "button": "Réinitialiser le mot de passe",
+        "success": "Mot de passe réinitialisé avec succès !",
+        "requirements": "Le mot de passe doit contenir au moins 8 caractères avec lettres majuscules, minuscules, chiffres et caractères spéciaux.",
+        "errors": {
+          "mismatch": "Les mots de passe ne correspondent pas",
+          "weak": "Le mot de passe ne respecte pas les exigences de sécurité",
+          "invalidToken": "Lien de réinitialisation invalide ou expiré",
+          "network": "Erreur de réseau. Veuillez réessayer."
+        }
+      }
+    }
+  },
+  "footer": {
+    "about": "À propos",
+    "links": "Liens utiles",
+    "contact": "Contact",
+    "newsletter": "Bulletin d'information",
+    "copyright": "© 2025 Rotary Club Tunis Doyen. Tous droits réservés.",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "view": "Voir",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "yes": "Oui",
+    "no": "Non"
+  }
+}

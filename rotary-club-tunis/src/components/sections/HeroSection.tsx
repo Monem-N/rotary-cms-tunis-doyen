@@ -1,14 +1,13 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { CLUB_STATISTICS } from '@/lib/constants'
 
 interface HeroSectionProps {
-  title?: string
-  subtitle?: string
-  description?: string
   primaryCTA?: {
     text: string
     href: string
@@ -18,13 +17,9 @@ interface HeroSectionProps {
     href: string
   }
   backgroundImage?: string
-  locale?: 'fr' | 'ar' | 'en'
 }
 
 export function HeroSection({
-  title = "Rotary Club Tunis Doyen",
-  subtitle = "Service Above Self - الخدمة فوق الذات",
-  description = "Fondé en 1929, nous sommes le premier club Rotary de Tunisie. Ensemble, nous transformons des vies et renforçons nos communautés locales et internationales.",
   primaryCTA = {
     text: "Rejoignez-nous",
     href: "#join"
@@ -33,69 +28,62 @@ export function HeroSection({
     text: "En savoir plus",
     href: "#about"
   },
-  backgroundImage = "/images/rotary-hero-bg.jpg",
-  locale = 'fr'
+  backgroundImage = "/images/rotary-hero-bg.jpg"
 }: HeroSectionProps) {
+  const t = useTranslations('hero')
+  const tCommon = useTranslations('common')
 
-  // Content based on locale
-  const getLocalizedContent = () => {
-    switch (locale) {
-      case 'ar':
-        return {
-          title: "نادي الروتاري تونس دوايان",
-          subtitle: "الخدمة فوق الذات - Service Above Self",
-          description: "تأسس عام 1929، نحن أول نادي روتاري في تونس. معاً، نحن نغير الحياة ونعزز مجتمعاتنا المحلية والدولية.",
-          primaryCTA: "انضم إلينا",
-          secondaryCTA: "اعرف المزيد",
-          stats: [
-            { number: "95+", label: "سنة من الخدمة" },
-            { number: "500+", label: "مشروع مجتمعي" },
-            { number: "1000+", label: "متطوع" }
-          ]
-        }
-      case 'en':
-        return {
-          title: "Rotary Club Tunis Doyen",
-          subtitle: "Service Above Self",
-          description: "Founded in 1929, we are Tunisia's first Rotary Club. Together, we transform lives and strengthen our local and international communities.",
-          primaryCTA: "Join Us",
-          secondaryCTA: "Learn More",
-          stats: [
-            { number: "95+", label: "Years of Service" },
-            { number: "500+", label: "Community Projects" },
-            { number: "1000+", label: "Volunteers" }
-          ]
-        }
-      default: // French
-        return {
-          title: "Rotary Club Tunis Doyen",
-          subtitle: "Service Above Self - الخدمة فوق الذات",
-          description: "Fondé en 1929, nous sommes le premier club Rotary de Tunisie. Ensemble, nous transformons des vies et renforçons nos communautés locales et internationales.",
-          primaryCTA: "Rejoignez-nous",
-          secondaryCTA: "En savoir plus",
-          stats: [
-            { number: "95+", label: "Années de service" },
-            { number: "500+", label: "Projets communautaires" },
-            { number: "1000+", label: "Bénévoles" }
-          ]
-        }
-    }
-  }
+  const [imageLoading, setImageLoading] = useState(true)
+  const [imageError, setImageError] = useState(false)
 
-  const content = getLocalizedContent()
+  // Map statistics with translation keys
+  const stats = CLUB_STATISTICS.map(stat => ({
+    number: stat.number,
+    label: t(`stats.${stat.key}Label`)
+  }))
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background with overlay */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/80 to-accent/90" />
-        <Image
-          src={backgroundImage}
-          alt="Rotary Club Tunis Doyen"
-          fill
-          className="object-cover"
-          priority
-        />
+
+        {/* Loading placeholder */}
+        {imageLoading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-primary/80">
+            <div className="text-white text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+              <p className="font-secondary">
+                {tCommon('loading')}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Error fallback */}
+        {imageError ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-primary/80">
+            <div className="text-white text-center">
+              <div className="text-6xl mb-4">🏛️</div>
+              <p className="font-secondary">
+                Background image not available
+              </p>
+            </div>
+          </div>
+        ) : (
+          <Image
+            src={backgroundImage}
+            alt="Rotary Club Tunis Doyen"
+            fill
+            className="object-cover"
+            priority
+            onLoadingComplete={() => setImageLoading(false)}
+            onError={() => {
+              setImageLoading(false)
+              setImageError(true)
+            }}
+          />
+        )}
       </div>
 
       {/* Content */}
@@ -104,28 +92,28 @@ export function HeroSection({
 
           {/* Main Heading */}
           <div className="space-y-4">
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight ${locale === 'ar' ? 'font-arabic' : 'font-primary'}`}>
-              {content.title}
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight font-primary">
+              {t('title')}
             </h1>
-            <p className={`text-xl md:text-2xl text-accent font-semibold ${locale === 'ar' ? 'font-arabic' : 'font-primary'}`}>
-              {content.subtitle}
+            <p className="text-xl md:text-2xl text-accent font-semibold font-primary">
+              {t('subtitle')}
             </p>
           </div>
 
           {/* Description */}
-          <p className={`text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed ${locale === 'ar' ? 'font-arabic' : 'font-secondary'}`}>
-            {content.description}
+          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed font-secondary">
+            {t('description')}
           </p>
 
           {/* CTA Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center ${locale === 'ar' ? 'flex-row-reverse' : ''}`}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Button
               size="lg"
               className="btn-primary text-lg px-8 py-4 min-w-[200px]"
               asChild
             >
               <a href={primaryCTA.href}>
-                {content.primaryCTA}
+                {t('primaryCTA')}
               </a>
             </Button>
 
@@ -136,20 +124,20 @@ export function HeroSection({
               asChild
             >
               <a href={secondaryCTA.href}>
-                {content.secondaryCTA}
+                {t('secondaryCTA')}
               </a>
             </Button>
           </div>
 
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-            {content.stats.map((stat, index) => (
+            {stats.map((stat, index) => (
               <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20">
                 <CardContent className="p-6 text-center">
                   <div className="text-3xl md:text-4xl font-bold text-accent mb-2">
                     {stat.number}
                   </div>
-                  <div className={`text-sm text-white/80 ${locale === 'ar' ? 'font-arabic' : 'font-secondary'}`}>
+                  <div className="text-sm text-white/80 font-secondary">
                     {stat.label}
                   </div>
                 </CardContent>
@@ -159,8 +147,8 @@ export function HeroSection({
 
           {/* Rotary International Logo/Branding */}
           <div className="mt-12 pt-8 border-t border-white/20">
-            <p className={`text-sm text-white/60 ${locale === 'ar' ? 'font-arabic' : 'font-secondary'}`}>
-              {locale === 'ar' ? 'جزء من شبكة روتاري الدولية' : locale === 'en' ? 'Part of the Rotary International Network' : 'Partie du réseau Rotary International'}
+            <p className="text-sm text-white/60 font-secondary">
+              {t('rotaryNetwork')}
             </p>
           </div>
         </div>

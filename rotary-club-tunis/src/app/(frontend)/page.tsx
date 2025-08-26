@@ -1,88 +1,56 @@
 import React from 'react'
-import Image from 'next/image'
-import { TestShadcnComponents } from '@/components/test-shadcn'
-import { StyleDebug } from '@/components/style-debug'
+import { HeroSection } from '@/components/sections/HeroSection'
+import { AboutSection } from '@/components/sections/AboutSection'
+import { EventsSection } from '@/components/sections/EventsSection'
+import { ArticlesSection } from '@/components/sections/ArticlesSection'
+import { ContactSection } from '@/components/sections/ContactSection'
+import { Navigation } from '@/components/layout/Navigation'
+import { Footer } from '@/components/layout/Footer'
+import ErrorBoundary from '@/components/ErrorBoundary'
 
 export default function HomePage() {
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        <h1 className="h1 text-primary">Welcome to Rotary Club Tunis Doyen CMS</h1>
-        <p className="subtitle text-muted-foreground mb-4">Service Above Self - الخدمة فوق الذات</p>
-        <p className="body-text mb-6">This CMS is designed with official Rotary International typography and brand guidelines.</p>
+    <ErrorBoundary locale="fr">
+      <div className="min-h-screen">
+        <Navigation />
 
-        {/* CSS Status Confirmation */}
-        <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-green-600 font-semibold">✅ CSS Status: LOADED & WORKING</span>
-          </div>
-          <p className="text-sm text-green-700">
-            Tailwind CSS v4 is properly configured with Rotary brand colors. All components are styled correctly.
-          </p>
-        </div>
+        <main>
+          {/* Hero Section with Error Boundary */}
+          <ErrorBoundary locale="fr">
+            <HeroSection />
+          </ErrorBoundary>
 
-        {/* Rotary Brand Color Test */}
-        <div className="mb-8 p-4 border rounded-lg">
-          <h3 className="text-lg font-semibold mb-4">🎨 Rotary Brand Colors</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-primary text-primary-foreground rounded-lg text-center">
-              <div className="font-semibold">Primary</div>
-              <div className="text-sm opacity-90">Rotary Blue (#1f4788)</div>
-            </div>
-            <div className="p-4 bg-accent text-accent-foreground rounded-lg text-center">
-              <div className="font-semibold">Accent</div>
-              <div className="text-sm opacity-90">Rotary Gold (#f7a81b)</div>
-            </div>
-            <div className="p-4 bg-card text-card-foreground border rounded-lg text-center">
-              <div className="font-semibold">Card</div>
-              <div className="text-sm opacity-75">Background</div>
-            </div>
-            <div className="p-4 bg-secondary text-secondary-foreground rounded-lg text-center">
-              <div className="font-semibold">Secondary</div>
-              <div className="text-sm opacity-75">Light Gray</div>
-            </div>
-          </div>
-        </div>
+          {/* About Section with Error Boundary */}
+          <section id="about">
+            <ErrorBoundary locale="fr">
+              <AboutSection />
+            </ErrorBoundary>
+          </section>
 
-        {/* Test shadcn/ui Components */}
-        <TestShadcnComponents />
-        {/* Style Debug */}
-        <StyleDebug />
+          {/* Events Section with Error Boundary */}
+          <section id="events">
+            <ErrorBoundary locale="fr">
+              <EventsSection />
+            </ErrorBoundary>
+          </section>
 
-        <div className="links">
-          <a
-            className="admin"
-            href="/admin"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
+          {/* Articles Section with Error Boundary */}
+          <section id="articles">
+            <ErrorBoundary locale="fr">
+              <ArticlesSection />
+            </ErrorBoundary>
+          </section>
+
+          {/* Contact Section with Error Boundary */}
+          <section id="contact">
+            <ErrorBoundary locale="fr">
+              <ContactSection />
+            </ErrorBoundary>
+          </section>
+        </main>
+
+        <Footer />
       </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href="#">
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+    </ErrorBoundary>
   )
 }
