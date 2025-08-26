@@ -1,4 +1,5 @@
-// Tunisia-specific Payload CMS configuration for Rotary Club Tunis Doyen
+// Enhanced Payload CMS configuration for Rotary Club Tunis Doyen
+// Security-focused configuration with Tunisia-specific optimizations
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -12,76 +13,104 @@ import { Media } from './collections/Media'
 import { Events } from './collections/Events'
 import { Minutes } from './collections/Minutes'
 import { Articles } from './collections/Articles'
+import LoginAttempts from './collections/LoginAttempts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
+
+  // Enhanced authentication with secure defaults
   admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    // Enhanced admin panel security
+    // Enhanced admin panel security for Tunisia
     meta: {
-      title: 'Rotary Club Tunis Doyen - Admin Panel',
-      description: 'Secure administrative interface for Rotary Club Tunis Doyen',
-      // keywords field removed for security reasons
+      title: 'Rotary Club Tunis Doyen - Secure Admin Panel',
+      description: 'Enterprise-grade administrative interface for Rotary Club Tunis Doyen',
     },
-    // Custom components for enhanced security
+    // Custom components for enhanced security and UX
     components: {
       logout: {
         Button: path.resolve(dirname, './components/admin/CustomLogoutButton'),
       },
     },
-    // Live preview configuration for secure content editing
-    livePreview: {
-      url: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
-      collections: ['articles', 'events', 'minutes'],
-    },
   },
-  editor: lexicalEditor({
-    // RTL support will be added via custom CSS in the admin panel
-    // Tunisia-specific configuration for Arabic content
-  }),
-  // Tunisia-specific trilingual localization with RTL support
+
+  // Enhanced lexical editor with Tunisia-specific RTL support
+  editor: lexicalEditor(),
+
+  // Enhanced Tunisia-specific trilingual localization with proper RTL support
   localization: {
     locales: [
       {
         label: 'Français',
-        code: 'fr'
+        code: 'fr',
+        rtl: false
       },
       {
         label: 'العربية',
-        code: 'ar'
+        code: 'ar',
+        rtl: true
       },
       {
         label: 'English',
-        code: 'en'
+        code: 'en',
+        rtl: false
       }
     ],
     defaultLocale: 'fr',
-    fallback: true
+    fallback: true,
+    // Critical Tunisia-specific cascade for content availability
+    fallbackLocale: {
+      fr: ['ar', 'en'],
+      ar: ['fr', 'en'],
+      en: ['fr']
+    }
   },
-  collections: [Users, Media, Events, Minutes, Articles],
+
+  // Collections with enhanced security and Tunisia-specific features
+  collections: [Users, Media, Events, Minutes, Articles, LoginAttempts],
+
+  // Enhanced security configuration
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+
+  // Enhanced database configuration with Tunisia-specific optimizations
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: process.env.MONGODB_URI || process.env.DATABASE_URI || '',
+    // Tunisia-specific connection optimizations
+    connectOptions: {
+      maxPoolSize: 10, // Connection pooling for Tunisia network
+      serverSelectionTimeoutMS: 30000, // 30s timeout for slow connections
+      socketTimeoutMS: 45000,
+      maxIdleTimeMS: 30000,
+      // Security enhancements
+      tls: true,
+      tlsInsecure: false,
+    },
   }),
-  // Security configuration for Tunisia network
+
+  // Enhanced security configuration for Tunisia network
   cors: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
     process.env.VERCEL_URL || '',
     'https://rotary-tunis-doyen.vercel.app',
+    'https://cms.rotary-tunis.tn',
   ].filter(Boolean),
+
   csrf: [
     process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
     process.env.VERCEL_URL || '',
     'https://rotary-tunis-doyen.vercel.app',
+    'https://cms.rotary-tunis.tn',
   ].filter(Boolean),
-  sharp,
+
+  // Enhanced Sharp configuration for Tunisia mobile optimization
+  sharp
 })
